@@ -7,10 +7,12 @@ import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.stereotype.Component;
 
-//@Component
+@Component
 @RequiredArgsConstructor
-public class JobRunner implements ApplicationRunner {
+public class JobRunner implements ApplicationRunner
+{
     //ApplicationRunner
     //Spring Boot가 초기화 되고 완료시 가장먼저 호출
     private final JobLauncher jobLauncher;
@@ -19,7 +21,7 @@ public class JobRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         JobParameters jobParameters = new JobParametersBuilder()
-                .addString("name", "user2")
+                .addString("name", "user3")
                 .toJobParameters();
         jobLauncher.run(job, jobParameters);
     }
