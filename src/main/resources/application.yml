@@ -33,4 +33,4 @@ spring:
     jdbc:
       initialize-schema: always
     job:
-      enabled: false #자동실행방지
+      enabled: true #자동실행방지
