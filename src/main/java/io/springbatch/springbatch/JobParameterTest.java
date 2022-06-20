@@ -9,22 +9,28 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
-//ApplicationRunner -> Spring boot가 초기화 되고 완료되면 가장 먼저 호출되는 타입
-@Component //선언해줘야 호출이 됨
-public class JobRunner implements ApplicationRunner {
+import java.util.Date;
 
+/**
+ * packageName : io.springbatch.springbatch
+ * fileName : JobParameterTest
+ * author : psjw
+ */
+
+@Component
+public class JobParameterTest implements ApplicationRunner{
     @Autowired
     private JobLauncher jobLauncher;
-
     @Autowired
-    private Job job; //JobInstanceConfiguration의 job()
+    private Job job;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
         JobParameters jobParameters = new JobParametersBuilder()
-                .addString("name", "user2")
-                .toJobParameters();
-
+                .addString("name", "user")
+                .addLong("seq", 2L)
+                .addDate("date", new Date())
+                .addDouble("age", 16.5).toJobParameters();
         jobLauncher.run(job, jobParameters);
     }
 }
