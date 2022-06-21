@@ -9,41 +9,32 @@ import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * packageName : io.springbatch.springbatch
- * fileName : JobExecutionConfiguration
- * author : psjw
- */
 @Configuration
 @RequiredArgsConstructor
-public class JobExecutionConfiguration {
+public class StepConfiguration {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
 
     @Bean
-    public Job batchJob() {
+    public Job batchJob(){
         return jobBuilderFactory.get("job")
                 .start(step1())
                 .next(step2())
                 .build();
     }
 
-    @Bean
-    public Step step1() {
+    private Step step1() {
         return stepBuilderFactory.get("step1")
-                .tasklet((stepContribution, chunkContext) -> {
-                    System.out.println("###step1###");
+                .tasklet(((stepContribution, chunkContext) -> {
+                    System.out.println("######step1###########");
                     return RepeatStatus.FINISHED;
-                }).build();
+                }))
+                .build();
     }
 
-    @Bean
-    public Step step2() {
+    private Step step2() {
         return stepBuilderFactory.get("step2")
-                .tasklet((stepContribution, chunkContext) -> {
-                    System.out.println("###step2###");
-//                    throw new RuntimeException("step2 has failed");
-                    return RepeatStatus.FINISHED;
-                }).build();
+                .tasklet(new CustomTasklet())
+                .build();
     }
 }
