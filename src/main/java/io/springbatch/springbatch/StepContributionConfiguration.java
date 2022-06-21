@@ -11,12 +11,12 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * packageName : io.springbatch.springbatch
- * fileName : StepExecutionConfig
+ * fileName : StepContributionConfiguration
  * author : psjw
  */
 @RequiredArgsConstructor
 @Configuration
-public class StepExecutionConfig {
+public class StepContributionConfiguration {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
 
@@ -25,38 +25,23 @@ public class StepExecutionConfig {
         return jobBuilderFactory.get("job")
                 .start(step1())
                 .next(step2())
-                .next(step3())
                 .build();
     }
 
 
-
-    @Bean
-    public Step step1() {
+    private Step step1() {
         return stepBuilderFactory.get("step1")
                 .tasklet(((stepContribution, chunkContext) -> {
-                    System.out.println("##step1##");
+//                    stepContribution.getStepExecution().getJobExecution().getJobInstance().getJobName();
+                    System.out.println("###step1###");
                     return RepeatStatus.FINISHED;
                 }))
                 .build();
     }
-
-    @Bean
-    public Step step2() {
-        return stepBuilderFactory.get("step2")
+    private Step step2() {
+        return stepBuilderFactory.get("step1")
                 .tasklet(((stepContribution, chunkContext) -> {
-                    System.out.println("##step2##");
-//                    throw new RuntimeException("##step2 failed##");
-                    return RepeatStatus.FINISHED;
-                }))
-                .build();
-    }
-
-    @Bean
-    public Step step3() {
-        return stepBuilderFactory.get("step3")
-                .tasklet(((stepContribution, chunkContext) -> {
-                    System.out.println("##step3##");
+                    System.out.println("###step1###");
                     return RepeatStatus.FINISHED;
                 }))
                 .build();
