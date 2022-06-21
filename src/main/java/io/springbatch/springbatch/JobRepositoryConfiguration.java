@@ -2,34 +2,33 @@ package io.springbatch.springbatch;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
  * packageName : io.springbatch.springbatch
- * fileName : ExecutionContextConfiguration
+ * fileName : JobRepositoryConfiguration
  * author : psjw
  */
 @Configuration
 @RequiredArgsConstructor
-public class ExecutionContextConfiguration {
+public class JobRepositoryConfiguration {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
-    private final ExecutionContextTasklet1 executionContextTasklet1;
-    private final ExecutionContextTasklet2 executionContextTasklet2;
-    private final ExecutionContextTasklet3 executionContextTasklet3;
-    private final ExecutionContextTasklet4 executionContextTasklet4;
+    //--name=batchJob requestDate=20220621
+    private final JobExecutionListener jobExecutionListener;
 
     @Bean
-    public Job batchJob(){
-        return this.jobBuilderFactory.get("job")
+    public Job batchJob() {
+        return jobBuilderFactory.get("batchJob")
                 .start(step1())
                 .next(step2())
-                .next(step3())
-                .next(step4())
+                .listener(jobExecutionListener)
                 .build();
     }
 
@@ -37,29 +36,16 @@ public class ExecutionContextConfiguration {
     @Bean
     public Step step1() {
         return stepBuilderFactory.get("step1")
-                .tasklet(executionContextTasklet1)
+                .tasklet((stepContribution, chunkContext) -> {
+                    return RepeatStatus.FINISHED;
+                })
                 .build();
     }
 
     @Bean
     public Step step2() {
         return stepBuilderFactory.get("step2")
-                .tasklet(executionContextTasklet2)
+                .tasklet((stepContribution, chunkContext) -> null)
                 .build();
     }
-
-    @Bean
-    public Step step3() {
-        return stepBuilderFactory.get("step3")
-                .tasklet(executionContextTasklet3)
-                .build();
-    }
-
-    @Bean
-    public Step step4() {
-        return stepBuilderFactory.get("step4")
-                .tasklet(executionContextTasklet4)
-                .build();
-    }
-
 }
