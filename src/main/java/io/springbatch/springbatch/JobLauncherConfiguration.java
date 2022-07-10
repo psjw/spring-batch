@@ -2,7 +2,6 @@ package io.springbatch.springbatch;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
@@ -12,40 +11,37 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * packageName : io.springbatch.springbatch
- * fileName : JobRepositoryConfiguration
+ * fileName : JobLauncherConfiguration
  * author : psjw
  */
+
 @Configuration
 @RequiredArgsConstructor
-public class JobRepositoryConfiguration {
+public class JobLauncherConfiguration {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
-    //--name=batchJob requestDate=20220621
-    private final JobExecutionListener jobExecutionListener;
 
     @Bean
-    public Job batchJob() {
-        return jobBuilderFactory.get("batchJob")
+    public Job batchJob(){
+        return this.jobBuilderFactory.get("Job")
                 .start(step1())
                 .next(step2())
-                .listener(jobExecutionListener)
                 .build();
     }
-
-
     @Bean
     public Step step1() {
-        return stepBuilderFactory.get("step1")
+        return this.stepBuilderFactory.get("step1")
                 .tasklet((stepContribution, chunkContext) -> {
+                    Thread.sleep(3000);
                     return RepeatStatus.FINISHED;
                 })
                 .build();
     }
-
     @Bean
     public Step step2() {
-        return stepBuilderFactory.get("step2")
+        return this.stepBuilderFactory.get("step2")
                 .tasklet((stepContribution, chunkContext) -> null)
                 .build();
     }
+
 }

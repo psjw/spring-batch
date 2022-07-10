@@ -32,5 +32,5 @@ spring:
   batch:
     jdbc:
       initialize-schema: always
-#    job:
-#      enabled: true #자동실행방지
+    job:
+      enabled: false #자동실행방지
