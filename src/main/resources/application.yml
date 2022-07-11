@@ -32,5 +32,8 @@ spring:
   batch:
     jdbc:
       initialize-schema: always
+#      table-prefix: SYSTEM_ #SYSTEM_로 Table 생성
     job:
-      enabled: false #자동실행방지
+#      enabled: false #자동실행방지
+#      names: batchJob1
+      names: ${job.name:NONE} #실행시점에 Binding Program Argument : --job.name=batchJob1 -> 없으면 NONE으로 실행
